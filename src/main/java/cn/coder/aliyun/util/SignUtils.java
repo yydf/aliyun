@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.xml.crypto.dsig.SignatureMethod;
 
 public class SignUtils {
 	private static Mac mac2 = null;
@@ -38,7 +39,7 @@ public class SignUtils {
 			if (mac2 == null) {
 				mac2 = Mac.getInstance("HmacSHA1");
 				mac2.init(new SecretKeySpec((secretAccessKey + "&").getBytes("UTF-8"),
-						"http://www.w3.org/2000/09/xmldsig#hmac-sha1"));
+						SignatureMethod.HMAC_SHA1));
 			}
 		}
 		byte[] bytes = mac2.doFinal(stringToSign.toString().getBytes("UTF-8"));

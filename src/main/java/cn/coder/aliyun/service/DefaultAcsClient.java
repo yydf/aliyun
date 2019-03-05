@@ -29,7 +29,7 @@ public class DefaultAcsClient extends ServiceClient {
 		if (templateParam != null) {
 			parameterMap.put("TemplateParam", templateParam);
 		}
-		String requestURL = signRequest(parameterMap, "http://dysmsapi.aliyuncs.com/");
+		String requestURL = signRequest(parameterMap, "https://dysmsapi.aliyuncs.com/");
 		String json = getJSON(requestURL.toString());
 		if (logger.isDebugEnabled())
 			logger.debug("[sendSms]" + json);

@@ -1,4 +1,8 @@
 # aliyun
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/cn.4coder/aliyun/badge.svg)](https://maven-badges.herokuapp.com/maven-central/cn.4coder/aliyun/)
+[![GitHub release](https://img.shields.io/github/release/yydf/aliyun.svg)](https://github.com/yydf/aliyun/releases)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://raw.githubusercontent.com/yydf/aliyun/master/LICENSE)
+![Jar Size](https://img.shields.io/badge/jar--size-9.20k-blue.svg)
 
 环境
 -------------
