@@ -10,10 +10,10 @@ import cn.coder.aliyun.util.SignUtils;
 public class DefaultAcsClient extends ServiceClient {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultAcsClient.class);
-	private String accessKeyId;
-	private String secretAccessKey;
+	private final String accessKeyId;
+	private final String secretAccessKey;
 
-	public DefaultAcsClient(String accessKeyId, String secretAccessKey, Object object, Object object2) {
+	public DefaultAcsClient(String accessKeyId, String secretAccessKey) {
 		this.accessKeyId = accessKeyId;
 		this.secretAccessKey = secretAccessKey;
 	}

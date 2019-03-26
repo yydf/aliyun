@@ -15,7 +15,7 @@ public class AcsClient {
 	}
 
 	public static void register(String accessKeyId, String secretAccessKey) {
-		acs = new DefaultAcsClient(accessKeyId, secretAccessKey, null, null);
+		acs = new DefaultAcsClient(accessKeyId, secretAccessKey);
 		if(logger.isDebugEnabled())
 			logger.debug("ACS client registered");
 	}
