@@ -14,10 +14,11 @@ public class AcsClient {
 		return acs;
 	}
 
-	public static void register(String accessKeyId, String secretAccessKey) {
+	public static DefaultAcsClient register(String accessKeyId, String secretAccessKey) {
 		acs = new DefaultAcsClient(accessKeyId, secretAccessKey);
 		if(logger.isDebugEnabled())
 			logger.debug("ACS client registered");
+		return acs;
 	}
 
 }
