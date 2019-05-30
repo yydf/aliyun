@@ -17,7 +17,7 @@
 <dependency>
     <groupId>cn.4coder</groupId>
     <artifactId>aliyun</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 </dependency>
 ```
 
@@ -26,4 +26,7 @@
 ```
 AcsClient.register(accessKeyId, secretAccessKey);
 System.out.println(AcsClient.getInstance().sendSms("XX", mobile, "SMS_XX", "{\"code\":\"1234\"}"));
+
+OssClient.register(accessKeyId, secretAccessKey).setBucket("test");
+OssClient.getInstance().putObject("test.txt", new FileInputStream(new File("d:/a.txt")));
 ```

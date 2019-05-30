@@ -4,7 +4,7 @@
 
 	<groupId>cn.4coder</groupId>
 	<artifactId>aliyun</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<packaging>jar</packaging>
 
 	<name>aliyun</name>

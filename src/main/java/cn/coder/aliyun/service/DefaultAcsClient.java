@@ -8,6 +8,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cn.coder.aliyun.AcsException;
 import cn.coder.aliyun.util.JSONUtils;
 import cn.coder.aliyun.util.SignUtils;
 
@@ -15,13 +16,10 @@ public class DefaultAcsClient extends ServiceClient {
 
 	private static final Logger logger = LoggerFactory.getLogger(DefaultAcsClient.class);
 	private static final Calendar calendar = Calendar.getInstance();
-	private final String accessKeyId;
-	private final String secretAccessKey;
 	private String poolKey;
 
-	public DefaultAcsClient(String accessKeyId, String secretAccessKey) {
-		this.accessKeyId = accessKeyId;
-		this.secretAccessKey = secretAccessKey;
+	public DefaultAcsClient(String accessKey, String secretKey) {
+		super(accessKey, secretKey);
 	}
 
 	public boolean sendSms(String signName, String mobile, String templateCode, String templateParam) {
@@ -42,19 +40,12 @@ public class DefaultAcsClient extends ServiceClient {
 		return json != null && json.contains("\"Message\":\"OK\"");
 	}
 
-	protected String signRequest(Map<String, String> parameterMap, String url) {
-		try {
-			return SignUtils.signURL(parameterMap, this.secretAccessKey, url);
-		} catch (Exception e) {
-			logger.error("Sing request faild", e);
-			return null;
-		}
-	}
-
-	public String bindAxb(String phoneA, String phoneB, String outId) {
+	public String bindAxb(String phoneA, String phoneB, String outId) throws AcsException {
+		if(this.poolKey == null || this.poolKey.trim().length() == 0)
+			throw new AcsException("The pool key can not be null");
 		Map<String, String> parameterMap = SignUtils.getCommonParameters(this.accessKeyId, "BindAxb");
 		calendar.setTime(new Date());
-		calendar.add(Calendar.MINUTE, 2);
+		calendar.add(Calendar.SECOND, 65);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		parameterMap.put("Version", "2017-05-25");
 		parameterMap.put("RegionId", "cn-hangzhou");
@@ -67,7 +58,7 @@ public class DefaultAcsClient extends ServiceClient {
 		String json = getJSON(requestURL.toString());
 		if (logger.isDebugEnabled())
 			logger.debug("[bindAxb]" + json);
-		//System.out.println(json);
+		// System.out.println(json);
 		if (json != null && json.contains("\"Message\":\"OK\""))
 			return JSONUtils.getString(json, "SecretNo");
 		return null;

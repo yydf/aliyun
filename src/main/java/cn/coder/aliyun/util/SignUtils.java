@@ -17,9 +17,43 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.crypto.dsig.SignatureMethod;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SignUtils {
+	private static final Logger logger = LoggerFactory.getLogger(SignUtils.class);
+	private static Mac mac = null;
+	private static final Object obj = new Object();
 	private static Mac mac2 = null;
-	private static Object obj2 = new Object();
+	private static final Object obj2 = new Object();
+	private static final String NEW_LINE = "\n";
+	private static final String ALGORITHM = "HmacSHA1";
+	private static final String ENCODE_TYPE = "UTF-8";
+
+	public static boolean sign(String resourcePath, Map<String, String> headers, String accessKeyId,
+			String secretAccessKey) {
+		try {
+			StringBuilder signStr = new StringBuilder();
+			signStr.append("PUT").append(NEW_LINE);
+			signStr.append(NEW_LINE);
+			signStr.append(headers.get("Content-Type")).append(NEW_LINE);
+			signStr.append(headers.get("Date")).append(NEW_LINE);
+			signStr.append(resourcePath);
+			synchronized (obj) {
+				if (mac == null) {
+					mac = Mac.getInstance(ALGORITHM);
+					mac.init(new SecretKeySpec(secretAccessKey.getBytes(ENCODE_TYPE), ALGORITHM));
+				}
+			}
+			byte[] bytes = mac.doFinal(signStr.toString().getBytes(ENCODE_TYPE));
+			String signature = Base64.getEncoder().encodeToString(bytes);
+			headers.put("Authorization", "OSS " + accessKeyId + ":" + signature);
+			return true;
+		} catch (NoSuchAlgorithmException | InvalidKeyException | UnsupportedEncodingException e) {
+			logger.error("加密失败", e);
+		}
+		return false;
+	}
 
 	public static String signURL(Map<String, String> parameterMap, String secretAccessKey, String url)
 			throws UnsupportedEncodingException, InvalidKeyException, NoSuchAlgorithmException {
@@ -38,8 +72,7 @@ public class SignUtils {
 		synchronized (obj2) {
 			if (mac2 == null) {
 				mac2 = Mac.getInstance("HmacSHA1");
-				mac2.init(new SecretKeySpec((secretAccessKey + "&").getBytes("UTF-8"),
-						SignatureMethod.HMAC_SHA1));
+				mac2.init(new SecretKeySpec((secretAccessKey + "&").getBytes("UTF-8"), SignatureMethod.HMAC_SHA1));
 			}
 		}
 		byte[] bytes = mac2.doFinal(stringToSign.toString().getBytes("UTF-8"));
